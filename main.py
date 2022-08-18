@@ -3,7 +3,7 @@ import boto3
 from environs import Env
 from datetime import datetime, date
 
-from .exceptions import (
+from exceptions import (
     PrefixNameFolderNotFoundException,
     MonthInformedIsNotIntException,
 )
@@ -18,8 +18,16 @@ REGION_NAME = env("REGION_NAME")
 
 s3_client = boto3.client(
     "s3",
-    AWS_ACCESS_KEY_ID=AWS_ACCESS_KEY_ID,
-    AWS_SECRET_ACCESS_KEY=AWS_SECRET_ACCESS_KEY,
+    aws_access_key_id=AWS_ACCESS_KEY_ID,
+    aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+    region_name=REGION_NAME
+)
+
+s3 = boto3.resource(
+    "s3",
+    aws_access_key_id=AWS_ACCESS_KEY_ID,
+    aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+    region_name=REGION_NAME
 )
 
 
@@ -33,7 +41,8 @@ def get_folders(path: str) -> list:
 
 def get_items_in_folder(folder: str) -> list:
     """ Get all items in bucket using a folder as filter """
-    return AWS_STORAGE_BUCKET_NAME.objects.filter(Prefix=folder)
+    my_bucket = s3.Bucket(AWS_STORAGE_BUCKET_NAME)
+    return my_bucket.objects.filter(Prefix=folder)
 
 
 def age_in_years(birthdate: datetime) -> int:

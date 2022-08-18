@@ -14,3 +14,15 @@ Activate your virtual environment
 ```
 source .env/bin/activate 
 ```
+
+
+### Setup your Environment Variables
+
+Copy file ```.env_sample``` to ```.env```, then update with your credentials
+
+### Run
+
+```
+python main.py
+```
+
